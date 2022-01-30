@@ -1,0 +1,31 @@
+{
+  "name": "audit-log-package",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kunaladhikari27/audit-log-package.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kunaladhikari27/audit-log-package/issues"
+  },
+  "homepage": "https://github.com/kunaladhikari27/audit-log-package#readme",
+  "devDependencies": {
+    "@types/node": "^17.0.13",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "logform": "^2.3.2",
+    "os": "^0.1.2",
+    "winston": "^3.5.0"
+  }
+}
