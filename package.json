@@ -1,9 +1,9 @@
 {
   "name": "audit-log-package",
-  "version": "1.0.0",
-  "description": "",
-  "main": "dist/lib/index.js",
-  "types": "dist/lib/index.d.ts",
+  "version": "0.0.6",
+  "description": "This package is to create audit logs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -20,12 +20,14 @@
   },
   "homepage": "https://github.com/kunaladhikari27/audit-log-package#readme",
   "devDependencies": {
-    "@types/node": "^17.0.13",
+    "@types/node": "^17.0.14",
     "typescript": "^4.5.5"
   },
   "dependencies": {
+    "@types/express": "^4.17.13",
     "logform": "^2.3.2",
     "os": "^0.1.2",
-    "winston": "^3.5.0"
+    "winston": "^3.5.0",
+    "winston-kafka-connect": "^2.0.12"
   }
 }
