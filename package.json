@@ -1,6 +1,6 @@
 {
   "name": "audit-log-package",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "This package is to create audit logs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@types/express": "^4.17.13",
+    "inversify": "^6.0.1",
     "logform": "^2.3.2",
     "os": "^0.1.2",
     "winston": "^3.5.0",

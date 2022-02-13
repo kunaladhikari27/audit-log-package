@@ -1,76 +1,86 @@
-import { Logger, createLogger, transports, format, http } from "winston";
-import os from "os";
+import { createLogger, format, transports, Logger as Iwinston } from "winston";
+import { IAuditLogs } from "../interfaces/auditLog.interface";
 import { ColorizeOptions } from "logform";
-const path = require("path");
-import { IAuditLogs, ISystemDetails } from "./../interfaces/auditLog.interface";
-// var winston = require("winston");
-// require("winston-kafka-connect");
+import os from "os";
+import "reflect-metadata";
+import { injectable } from "inversify";
+const { combine, timestamp, metadata, json, errors, label, printf } = format;
 
-const logDetails: ColorizeOptions = {
-  message: false,
-  colors: {
-    info: "green",
-  },
-};
+@injectable()
+export class Logger {
+  public logger: Iwinston;
 
-function getTimeZone(): string {
-  const date = new Date();
-  const dateInUtc =
-    date.getUTCFullYear().toString() +
-    "-" +
-    date.getUTCMonth() +
-    "-" +
-    date.getUTCDate() +
-    " " +
-    date.getUTCHours() +
-    ":" +
-    date.getUTCMinutes() +
-    ":" +
-    date.getUTCSeconds() +
-    ":" +
-    date.getUTCMilliseconds();
-  return dateInUtc;
-}
-const httpService = new transports.Http({
-  host: "localhost",
-  port: 3000,
-  path: "/auditlogs",
-});
-httpService.on("warn", (e) => console.log("warning! " + e));
+  constructor() {
+    this.logger = createLogger(this.readOptions());
+  }
 
-export function getLogger(systemDetails: ISystemDetails): Logger {
-  return createLogger({
-    format: format.combine(
-      format.label({ label: path.basename(process.mainModule.filename) }),
-      format.timestamp({ format: getTimeZone() }),
-      // Format the metadata object
-      format.metadata({
-        key: "payload",
-        fillExcept: ["message", "level", "timestamp", "label"],
-      })
-    ),
-    transports: [
-      new transports.Console({
-        format: format.combine(
-          format.colorize(logDetails),
-          format.printf(
-            (info) =>
-              `[${getTimeZone()}]:[${os
-                .hostname()
-                .toString()}]:[${systemDetails.application_name.toString()}]:[${
-                systemDetails.build_version
-              }]:[${process.env.NODE_ENV}]:[${info.level.toUpperCase()}]:[${
-                info.message
-              }]`
-          )
-        ),
-      }),
-      new transports.File({
-        filename: "logs/audit.log",
-        format: format.combine(format.json()),
-      }),
-      httpService,
-    ],
-    exitOnError: false,
-  });
+  public info(message: string, data?: IAuditLogs): void {
+    console.log(data);
+    this.logger.info(message, data);
+  }
+
+  private readOptions(): Object {
+    const logDetails: ColorizeOptions = {
+      message: false,
+      colors: {
+        info: "green",
+      },
+    };
+
+    function getTimeZone(): string {
+      const date = new Date();
+      const dateInUtc =
+        date.getUTCFullYear().toString() +
+        "-" +
+        date.getUTCMonth() +
+        "-" +
+        date.getUTCDate() +
+        " " +
+        date.getUTCHours() +
+        ":" +
+        date.getUTCMinutes() +
+        ":" +
+        date.getUTCSeconds() +
+        ":" +
+        date.getUTCMilliseconds();
+      return dateInUtc;
+    }
+    const httpService = new transports.Http({
+      host: "localhost",
+      port: 3000,
+      path: "/auditlogs",
+    });
+    httpService.on("warn", (e) => console.log("warning! " + e));
+    return {
+      format: combine(
+        label({ label: process.env.APP_NAME || "Unknown App" }),
+        errors({ stack: true }),
+        // Format the metadata object
+        format.metadata({
+          key: "payload",
+          fillExcept: ["message", "level", "timestamp", "label"],
+        })
+      ),
+      transports: [
+        new transports.Console({
+          format: format.combine(
+            format.colorize(logDetails),
+            format.printf(
+              (info) =>
+                `[${getTimeZone()}]:[${os.hostname().toString()}]:[${
+                  process.env.APP_NAME || "Unknown App"
+                }]:[${process.env.NODE_ENV}]:[${info.level.toUpperCase()}]:[${
+                  info.message
+                }]`
+            )
+          ),
+        }),
+        new transports.File({
+          filename: "logs/audit.log",
+          format: format.combine(format.json()),
+        }),
+        httpService,
+      ],
+    };
+  }
 }
