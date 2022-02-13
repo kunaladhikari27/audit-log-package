@@ -7,6 +7,7 @@ export interface IAuditLogs {
   updated_data?: any;
   address?: IAddress;
 }
+
 export interface IAddress {
   ip: string;
   country: string;
