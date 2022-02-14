@@ -2,9 +2,10 @@ export interface IAuditLogs {
   message: string;
   action: Action;
   actor_uuid: string;
+  group?: string;
   actor_type: ActorType;
-  previous_data?: any;
-  updated_data?: any;
+  previous_value?: any;
+  updated_value?: any;
   address?: IAddress;
 }
 
