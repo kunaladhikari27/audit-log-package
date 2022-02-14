@@ -42,11 +42,11 @@ export class Logger {
     return {
       format: format.combine(
         format.label({ label: process.env.APP_NAME || "Unknown App" }),
-        format.timestamp({ format: this.getTimeZone() }),
+        format.timestamp({ format: this.getTimeZone() })
         // Format the metadata object
-        format.metadata({
-          fillExcept: ["message", "level", "timestamp", "label"],
-        })
+        // format.metadata({
+        //   fillExcept: ["message", "level", "timestamp", "label"],
+        // })
       ),
       transports: [
         new transports.File({
