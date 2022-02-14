@@ -12,7 +12,8 @@ export const logger = new Logger();
 
 ### Inside functions
 
+#### Construct the payload and pass it inside logger
+
 ```
-Construct the payload and pass it inside logger
 logger.info(payload);
 ```
